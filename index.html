@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASOBI de TOKAI</title>
+<meta name="description" content="地球のみんながガイドになれる体験プラットフォーム（試作版）">
+<style>
+:root{
+  --green:#1F7A3A; --green-dark:#14572A; --green-soft:#E9F4EC;
+  --red:#D7263D; --red-soft:#FCE9EC;
+  --ink:#1A1A1A; --muted:#5F6B63; --line:#E3E8E4; --bg:#FFFFFF; --card:#F6F8F6;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+header{background:var(--green);color:#fff;position:sticky;top:0;z-index:10}
+header .wrap{display:flex;align-items:center;gap:24px;height:64px}
+.logo{font-weight:800;font-size:22px;letter-spacing:.5px}
+.logo span{font-weight:400;opacity:.85}
+nav{display:flex;gap:20px;margin-left:auto;font-size:15px}
+nav a{opacity:.9}
+nav a.on{opacity:1;font-weight:700;border-bottom:2px solid #fff}
+.lang{border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:4px 12px;font-size:13px;background:transparent;color:#fff}
+.btn{display:inline-block;border:none;border-radius:10px;padding:12px 22px;font-weight:700}
+.btn-red{background:var(--red);color:#fff}
+.btn-green{background:var(--green);color:#fff}
+.btn-ghost{background:#fff;color:var(--green);border:2px solid var(--green)}
+.hero{background:var(--green-soft);padding:56px 0 48px}
+.hero h1{font-size:44px;line-height:1.3;margin:0 0 12px}
+.hero h1 em{font-style:normal;color:var(--red)}
+.hero p{font-size:18px;color:var(--muted);margin:0 0 24px}
+.search{display:flex;gap:10px;background:#fff;border-radius:14px;padding:10px;box-shadow:0 6px 20px rgba(20,87,42,.12);max-width:760px}
+.search input,.search select{border:1px solid var(--line);border-radius:10px;padding:12px 14px;font:inherit;flex:1;min-width:0}
+.stats{display:flex;gap:28px;margin-top:22px;font-size:14px;color:var(--muted)}
+.stats b{display:block;font-size:24px;color:var(--ink)}
+section{padding:44px 0}
+h2{font-size:26px;margin:0 0 6px}
+.sub{color:var(--muted);margin:0 0 22px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:transform .15s, box-shadow .15s;display:block}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.08)}
+.thumb{height:150px;display:flex;align-items:center;justify-content:center;font-size:64px;position:relative}
+.tag{position:absolute;top:12px;left:12px;background:var(--red);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+.guide-row{display:flex;align-items:center;gap:10px;padding:14px 16px 0}
+.avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--green-soft);border:2px solid var(--green);flex:none}
+.guide-name{font-weight:700;font-size:15px}
+.guide-role{font-size:12px;color:var(--muted)}
+.card h3{font-size:17px;margin:8px 16px 6px;line-height:1.45}
+.meta{display:flex;justify-content:space-between;align-items:center;padding:6px 16px 16px;font-size:14px;color:var(--muted)}
+.price{color:var(--ink);font-weight:800;font-size:16px}
+.price small{font-weight:400;color:var(--muted)}
+.guides{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.gcard{background:var(--card);border-radius:16px;padding:20px;text-align:center}
+.gcard .avatar{width:72px;height:72px;font-size:36px;margin:0 auto 10px}
+.gcard p{font-size:13px;color:var(--muted);margin:6px 0 0}
+.cta{background:var(--green);color:#fff;border-radius:20px;padding:36px;display:flex;align-items:center;gap:24px}
+.cta h2{color:#fff}
+.cta p{margin:0;opacity:.9}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:22px 0}
+.step{border:1px solid var(--line);border-radius:16px;padding:22px}
+.step .num{width:36px;height:36px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;margin-bottom:10px}
+.step.hl{border:2px solid var(--red);background:var(--red-soft)}
+.step.hl .num{background:var(--red)}
+.detail{display:grid;grid-template-columns:1.6fr 1fr;gap:32px;padding-top:28px}
+.bigthumb{height:280px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:120px;position:relative}
+.hostbox{display:flex;gap:16px;align-items:center;background:var(--green-soft);border-radius:16px;padding:18px;margin:20px 0}
+.hostbox .avatar{width:76px;height:76px;font-size:38px}
+.badge{display:inline-block;background:#fff;border:1px solid var(--green);color:var(--green);border-radius:999px;font-size:12px;padding:2px 10px;margin:4px 4px 0 0}
+.book{border:1px solid var(--line);border-radius:18px;padding:22px;position:sticky;top:84px;box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.slots{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}
+.slot{border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center;font-size:14px;background:#fff}
+.slot.on{border:2px solid var(--green);background:var(--green-soft);font-weight:700}
+.slot.full{color:#aaa;text-decoration:line-through}
+.priceopt{display:flex;gap:8px;margin:10px 0}
+.priceopt button{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px;font-size:14px}
+.priceopt button.on{border:2px solid var(--red);color:var(--red);font-weight:700}
+ul.list{padding-left:20px;margin:8px 0}
+.form{background:var(--card);border-radius:18px;padding:26px;display:grid;gap:14px;max-width:760px}
+.form label{font-weight:700;font-size:14px}
+.form input,.form textarea,.form select{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;background:#fff;margin-top:6px}
+.dash{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:18px 0}
+.kpi{border:1px solid var(--line);border-radius:16px;padding:18px}
+.kpi b{display:block;font-size:28px}
+.kpi.red b{color:var(--red)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;white-space:nowrap}
+td b{white-space:nowrap}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
+.pill.in{background:var(--red-soft);color:var(--red)}
+.pill.jp{background:var(--green-soft);color:var(--green)}
+.bars{display:flex;align-items:flex-end;gap:14px;height:150px;padding:10px 0;border-bottom:1px solid var(--line)}
+.bar{flex:1;background:var(--green);border-radius:8px 8px 0 0;position:relative}
+.bar.cur{background:var(--red)}
+.bar span{position:absolute;bottom:-24px;left:0;right:0;text-align:center;font-size:12px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:14px 22px;border-radius:12px;display:none;z-index:50}
+footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:13px;margin-top:30px}
+.demo-note{background:#FFF4D6;color:#7A5B00;font-size:12px;text-align:center;padding:4px}
+@media (max-width:860px){
+  .grid,.steps{grid-template-columns:1fr}
+  .guides,.dash{grid-template-columns:repeat(2,1fr)}
+  .detail{grid-template-columns:1fr}
+  .hero h1{font-size:32px}
+  nav{display:none}
+  .search{flex-direction:column}
+  .cta{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="demo-note" data-i18n="demo">試作版（デモ）です。掲載している体験・ガイドは説明用のサンプルで、予約はできません。</div>
+<header><div class="wrap">
+  <a class="logo" href="#/">ASOBI <span>de</span> TOKAI</a>
+  <nav>
+    <a href="#/" data-nav="home" data-i18n="navFind">体験をさがす</a>
+    <a href="#/guide" data-nav="guide" data-i18n="navGuide">ガイドになる</a>
+    <a href="#/dashboard" data-nav="dashboard" data-i18n="navDash">ガイド管理画面</a>
+  </nav>
+  <button class="lang" id="langBtn">EN</button>
+</div></header>
+<main id="app"></main>
+<div class="toast" id="toast"></div>
+<footer><div class="wrap">ASOBI de TOKAI（試作版）｜地球のみんながガイドになれる体験プラットフォーム</div></footer>
+
+<script>
+const EXP = [
+  {id:"sakura", emoji:"🌸", bg:"#FBE3EA", tag:{ja:"第1弾",en:"First project"},
+   title:{ja:"e-bikeで、誰も知らない桜並木を走る",en:"Ride a secret cherry-blossom lane by e-bike"},
+   guide:{name:{ja:"ひかり",en:"Hikari"},role:{ja:"山県市の観光を学ぶ大学生",en:"Tourism student from Yamagata"},av:"🚲"},
+   area:{ja:"岐阜県 山県市",en:"Yamagata, Gifu"}, hours:1.5, cap:20, rating:"新着"},
+  {id:"inoshishi", emoji:"🐗", bg:"#EFE6DA", tag:{ja:"なんだそれ",en:"Wait, what?"},
+   title:{ja:"猪を捕まえている人と、罠を見に山へ",en:"Walk the mountain with a wild-boar hunter"},
+   guide:{name:{ja:"タケさん",en:"Take"},role:{ja:"猟師歴20年",en:"Hunter, 20 years"},av:"🧔"},
+   area:{ja:"岐阜県 山県市",en:"Yamagata, Gifu"}, hours:1, cap:20, rating:"4.9"},
+  {id:"hebo", emoji:"🐝", bg:"#FFF1C7", tag:{ja:"なんだそれ",en:"Wait, what?"},
+   title:{ja:"はちを食べる人と、蜂の子をさがす",en:"Hunt for bee larvae with a local bee-eater"},
+   guide:{name:{ja:"ヨシコさん",en:"Yoshiko"},role:{ja:"へぼ（蜂の子）名人",en:"Hebo (bee) master"},av:"👵"},
+   area:{ja:"岐阜県 恵那市",en:"Ena, Gifu"}, hours:1, cap:20, rating:"4.8"},
+  {id:"kawasauna", emoji:"🧖", bg:"#DDEFF7", tag:{ja:"人気",en:"Popular"},
+   title:{ja:"川でサウナする人と、清流に飛び込む",en:"River sauna and a plunge into a clear stream"},
+   guide:{name:{ja:"ケンさん",en:"Ken"},role:{ja:"川サウナ愛好家",en:"River-sauna lover"},av:"🧑"},
+   area:{ja:"岐阜県 郡上市",en:"Gujo, Gifu"}, hours:1, cap:20, rating:"4.9"},
+  {id:"momigara", emoji:"🌾", bg:"#F4EBD0", tag:{ja:"なんだそれ",en:"Wait, what?"},
+   title:{ja:"籾殻をとにかく生産する人の、田んぼの1日",en:"A day with the man who makes rice husks"},
+   guide:{name:{ja:"マサさん",en:"Masa"},role:{ja:"米農家",en:"Rice farmer"},av:"👨‍🌾"},
+   area:{ja:"岐阜県 山県市",en:"Yamagata, Gifu"}, hours:1, cap:20, rating:"4.7"},
+  {id:"kominka", emoji:"🏚️", bg:"#E6E2DC", tag:{ja:"ちょっと怖い",en:"A bit spooky"},
+   title:{ja:"わざと、昔の家に泊まってみる",en:"Stay in an old house — on purpose"},
+   guide:{name:{ja:"アヤさん",en:"Aya"},role:{ja:"古民家の持ち主",en:"Old-house owner"},av:"👩"},
+   area:{ja:"岐阜県 美濃市",en:"Mino, Gifu"}, hours:1, cap:20, rating:"4.6"},
+  {id:"yanagase", emoji:"🏮", bg:"#F9E0D6", tag:{ja:"なつかしい",en:"Nostalgic"},
+   title:{ja:"色あせた商店街で、思い出にひたる人と歩く",en:"Stroll a faded arcade with a nostalgic local"},
+   guide:{name:{ja:"テツさん",en:"Tetsu"},role:{ja:"柳ヶ瀬で育った元店主",en:"Former shop owner, Yanagase"},av:"👴"},
+   area:{ja:"岐阜県 岐阜市",en:"Gifu City"}, hours:1, cap:20, rating:"4.8"},
+  {id:"yama", emoji:"⛰️", bg:"#DCEFE0", tag:{ja:"人気",en:"Popular"},
+   title:{ja:"山を説明できる人と、裏山を読み解く",en:"Read the back hills with a mountain storyteller"},
+   guide:{name:{ja:"ショウさん",en:"Sho"},role:{ja:"元陸上インストラクター",en:"Ex-running coach"},av:"🏃"},
+   area:{ja:"岐阜県 関市",en:"Seki, Gifu"}, hours:1, cap:20, rating:"4.7"}
+];
+const T = {
+  ja:{demo:"試作版（デモ）です。掲載している体験・ガイドは説明用のサンプルで、予約はできません。",
+    navFind:"体験をさがす",navGuide:"ガイドになる",navDash:"ガイド管理画面",
+    heroA:"地球のみんなが、",heroB:"ガイドになれる。",
+    heroP:"主役は、その土地が大好きな「人」。猟師も、農家も、商店街のおじいちゃんも。東海の“なんだそれ”な体験を、ガイドごと予約。",
+    where:"どこで遊ぶ？",kw:"例：猪、サウナ、田んぼ",go:"さがす",
+    s1:"体験",s2:"ガイド",s3:"対応言語",
+    pick:"今週の“なんだそれ”体験",pickSub:"ガイドの「好き」から生まれた体験です。",
+    perh:"/人・1時間〜",ppl:"定員",
+    gTitle:"ガイドが主役",gSub:"体験を選ぶのではなく、“会いたい人”を選ぶ。",
+    ctaT:"あなたの「好き」を、体験にしませんか？",ctaP:"資格がなくても大丈夫。体験づくりから販売まで、私たちが伴走します。",ctaB:"ガイドに登録する",
+    back:"← 一覧にもどる",host:"この体験のガイド",about:"どんな体験？",
+    aboutP:"ガイドが毎日見ている景色と、本気の「好き」をそのまま体験に。観光地ではない場所に、ガイドがいるから行けます。",
+    inc:"含まれるもの",inc1:"ガイド（日本語・英語の通訳つきも選べます）",inc2:"道具の貸し出し・保険",inc3:"少人数ならではの寄り道",
+    choose:"日時を選ぶ",jp:"日本語",en:"英語つき",book:"予約する（デモ）",booked:"デモなので予約は確定しません。ご覧いただきありがとうございます！",
+    left:"残り",full:"満席",
+    gpTitle:"だれでも、ガイドになれる",gpSub:"「頼まれてもないのに紹介したくなる場所」があれば十分です。",
+    st1:"好きを話す",st1p:"30分のオンライン面談で、あなたの「好き」とまちの話を聞かせてください。",
+    st2:"体験を一緒につくる",st2p:"ルート・時間・料金・安全対策を、私たちと一緒に設計します。英語は通訳がサポート。",
+    st3:"公開して、売る",st3p:"国内向けに公開。海外の旅行会社にも、私たちが旅行会社として販売します。",
+    fName:"お名前",fArea:"活動したい地域",fLove:"あなたが紹介したい「好き」",fLoveP:"例：毎朝、鳥羽川沿いの桜並木を走っています",fTime:"活動できる時間",send:"相談を申し込む（デモ）",sent:"デモなので送信されません。ご覧いただきありがとうございます！",
+    dTitle:"ガイド管理画面",dSub:"ひかり さん、今月もたくさん遊びました。",
+    k1:"今月の予約",k2:"参加者",k3:"今月の報酬",k4:"訪日のお客さま",
+    chartT:"月別の報酬（万円）",upT:"これからの予約",
+    thDate:"日時",thExp:"体験",thPpl:"人数",thLang:"言語",thPay:"報酬"
+  },
+  en:{demo:"Prototype (demo). Experiences and guides are samples; bookings are not real.",
+    navFind:"Find experiences",navGuide:"Become a guide",navDash:"Guide dashboard",
+    heroA:"Anyone on Earth",heroB:"can be a guide.",
+    heroP:"The stars are people who love their place — hunters, farmers, the old man in the arcade. Book Tokai's weirdest experiences, guide included.",
+    where:"Where to play?",kw:"e.g. boar, sauna, rice field",go:"Search",
+    s1:"experiences",s2:"guides",s3:"languages",
+    pick:"This week's “wait, what?” picks",pickSub:"Born from each guide's passion.",
+    perh:"/person · 1h+",ppl:"Max",
+    gTitle:"Guides are the stars",gSub:"Don't pick an activity. Pick a person you want to meet.",
+    ctaT:"Turn what you love into an experience",ctaP:"No license needed. We support you from design to sales.",ctaB:"Become a guide",
+    back:"← Back to list",host:"Your guide",about:"About this experience",
+    aboutP:"The guide's everyday view and real passion, as an experience. You can go off the tourist map because a local takes you there.",
+    inc:"Included",inc1:"Guide (English interpretation available)",inc2:"Gear rental and insurance",inc3:"Detours only small groups get",
+    choose:"Pick a date",jp:"Japanese",en:"With English",book:"Book (demo)",booked:"This is a demo, so no booking is made. Thank you for trying!",
+    left:"left",full:"Full",
+    gpTitle:"Anyone can be a guide",gpSub:"All you need is a place you'd recommend even when nobody asked.",
+    st1:"Tell us what you love",st1p:"A 30-minute online chat about your passion and your town.",
+    st2:"Design it together",st2p:"Route, timing, price and safety, designed with us. Interpreters support English.",
+    st3:"Publish and sell",st3p:"Listed for domestic travelers, and sold to overseas travel agencies through us.",
+    fName:"Name",fArea:"Area",fLove:"What you want to share",fLoveP:"e.g. I run along the cherry trees every morning",fTime:"When you are free",send:"Apply (demo)",sent:"This is a demo, so nothing is sent. Thank you!",
+    dTitle:"Guide dashboard",dSub:"Hikari, you played a lot this month.",
+    k1:"Bookings",k2:"Guests",k3:"Earnings",k4:"Inbound guests",
+    chartT:"Monthly earnings (¥10k)",upT:"Upcoming bookings",
+    thDate:"Date",thExp:"Experience",thPpl:"Guests",thLang:"Language",thPay:"Earnings"
+  }
+};
+let lang = "ja";
+try{ lang = localStorage.getItem("asobi-lang") || "ja"; }catch(e){}
+const t = k => T[lang][k];
+const L = o => o[lang];
+const $app = document.getElementById("app");
+
+function card(e){
+  return `<a class="card" href="#/exp/${e.id}">
+    <div class="thumb" style="background:${e.bg}"><span class="tag">${L(e.tag)}</span>${e.emoji}</div>
+    <div class="guide-row"><div class="avatar">${e.guide.av}</div>
+      <div><div class="guide-name">${L(e.guide.name)}</div><div class="guide-role">${L(e.guide.role)}</div></div></div>
+    <h3>${L(e.title)}</h3>
+    <div class="meta"><span>📍 ${L(e.area)}</span><span class="price">¥5,000<small>${t("perh")}</small></span></div>
+  </a>`;
+}
+function home(){
+  $app.innerHTML = `
+  <div class="hero"><div class="wrap">
+    <h1>${t("heroA")}<br><em>${t("heroB")}</em></h1>
+    <p>${t("heroP")}</p>
+    <div class="search">
+      <select><option>${t("where")}</option><option>岐阜県 山県市</option><option>岐阜市</option><option>郡上市</option></select>
+      <input placeholder="${t("kw")}">
+      <button class="btn btn-red">${t("go")}</button>
+    </div>
+    <div class="stats"><div><b>8</b>${t("s1")}</div><div><b>8</b>${t("s2")}</div><div><b>2</b>${t("s3")}</div></div>
+  </div></div>
+  <section><div class="wrap">
+    <h2>${t("pick")}</h2><p class="sub">${t("pickSub")}</p>
+    <div class="grid">${EXP.slice(0,6).map(card).join("")}</div>
+  </div></section>
+  <section style="padding-top:0"><div class="wrap">
+    <h2>${t("gTitle")}</h2><p class="sub">${t("gSub")}</p>
+    <div class="guides">${EXP.slice(1,5).map(e=>`<a class="gcard" href="#/exp/${e.id}"><div class="avatar">${e.guide.av}</div>
+      <div class="guide-name">${L(e.guide.name)}</div><p>${L(e.guide.role)}</p></a>`).join("")}</div>
+  </div></section>
+  <section style="padding-top:0"><div class="wrap"><div class="cta">
+    <div style="flex:1"><h2>${t("ctaT")}</h2><p>${t("ctaP")}</p></div>
+    <a class="btn btn-red" href="#/guide">${t("ctaB")}</a>
+  </div></div></section>`;
+}
+function detail(id){
+  const e = EXP.find(x=>x.id===id) || EXP[0];
+  const slots = [["11/21 (土)","10:00",8],["11/21 (土)","14:00",0],["11/22 (日)","10:00",15],["11/22 (日)","14:00",3]];
+  $app.innerHTML = `<div class="wrap">
+    <div class="detail">
+      <div>
+        <p><a href="#/" style="color:var(--green);font-weight:700">${t("back")}</a></p>
+        <div class="bigthumb" style="background:${e.bg}"><span class="tag">${L(e.tag)}</span>${e.emoji}</div>
+        <h1 style="font-size:30px;margin:18px 0 4px">${L(e.title)}</h1>
+        <div style="color:var(--muted)">📍 ${L(e.area)}　⏱ ${e.hours}h　👥 ${t("ppl")} ${e.cap}</div>
+        <div class="hostbox"><div class="avatar">${e.guide.av}</div>
+          <div><div style="font-size:13px;color:var(--muted)">${t("host")}</div>
+          <div style="font-size:22px;font-weight:800">${L(e.guide.name)}</div>
+          <div>${L(e.guide.role)}</div>
+          <span class="badge">🗣 日本語</span><span class="badge">🌏 English（通訳）</span><span class="badge">⭐ ${e.rating}</span></div></div>
+        <h2 style="font-size:20px">${t("about")}</h2><p>${t("aboutP")}</p>
+        <h2 style="font-size:20px">${t("inc")}</h2>
+        <ul class="list"><li>${t("inc1")}</li><li>${t("inc2")}</li><li>${t("inc3")}</li></ul>
+      </div>
+      <aside><div class="book">
+        <div class="price" style="font-size:28px" id="pr">¥5,000<small>${t("perh")}</small></div>
+        <div class="priceopt"><button class="on" data-p="5,000">${t("jp")}</button><button data-p="8,000">${t("en")}</button></div>
+        <div style="font-weight:700;margin-top:12px">${t("choose")}</div>
+        <div class="slots">${slots.map((s,i)=>`<div class="slot ${s[2]===0?"full":""} ${i===0?"on":""}">${s[0]}<br>${s[1]}<br><small>${s[2]===0?t("full"):t("left")+" "+s[2]}</small></div>`).join("")}</div>
+        <button class="btn btn-red" style="width:100%" id="bookBtn">${t("book")}</button>
+      </div></aside>
+    </div></div>`;
+  document.querySelectorAll(".priceopt button").forEach(b=>b.onclick=()=>{
+    document.querySelectorAll(".priceopt button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+    document.getElementById("pr").innerHTML=`¥${b.dataset.p}<small>${t("perh")}</small>`;});
+  document.querySelectorAll(".slot:not(.full)").forEach(s=>s.onclick=()=>{
+    document.querySelectorAll(".slot").forEach(x=>x.classList.remove("on"));s.classList.add("on");});
+  document.getElementById("bookBtn").onclick=()=>toast(t("booked"));
+}
+function guide(){
+  $app.innerHTML = `<section><div class="wrap">
+    <h1 style="font-size:34px;margin:0 0 6px">${t("gpTitle")}</h1><p class="sub" style="font-size:17px">${t("gpSub")}</p>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><h3 style="margin:0 0 6px">${t("st1")}</h3><p style="margin:0;color:var(--muted)">${t("st1p")}</p></div>
+      <div class="step hl"><div class="num">2</div><h3 style="margin:0 0 6px">${t("st2")}</h3><p style="margin:0;color:var(--muted)">${t("st2p")}</p></div>
+      <div class="step"><div class="num">3</div><h3 style="margin:0 0 6px">${t("st3")}</h3><p style="margin:0;color:var(--muted)">${t("st3p")}</p></div>
+    </div>
+    <div class="form">
+      <label>${t("fName")}<input value="佐野 ひかり"></label>
+      <label>${t("fArea")}<select><option>岐阜県 山県市</option><option>岐阜市</option><option>郡上市</option></select></label>
+      <label>${t("fLove")}<textarea rows="3" placeholder="${t("fLoveP")}"></textarea></label>
+      <label>${t("fTime")}<select><option>土日の午前</option><option>平日の夕方</option><option>春だけ</option></select></label>
+      <button class="btn btn-red" id="sendBtn">${t("send")}</button>
+    </div>
+  </div></section>`;
+  document.getElementById("sendBtn").onclick=()=>toast(t("sent"));
+}
+function dashboard(){
+  const months=[["7月",9],["8月",14],["9月",11],["10月",16],["11月",21]];
+  const max=Math.max(...months.map(m=>m[1]));
+  const rows=[["11/21 10:00","e-bike 桜並木（下見ツアー）",12,"in","¥76,800"],["11/22 10:00","e-bike 桜並木（下見ツアー）",5,"jp","¥20,000"],["11/22 14:00","e-bike 桜並木（下見ツアー）",17,"in","¥108,800"],["11/28 10:00","山を説明できる人と裏山へ",8,"jp","¥32,000"]];
+  $app.innerHTML = `<section><div class="wrap">
+    <h1 style="font-size:32px;margin:0">${t("dTitle")}</h1><p class="sub">${t("dSub")}</p>
+    <div class="dash">
+      <div class="kpi"><span>${t("k1")}</span><b>8</b></div>
+      <div class="kpi"><span>${t("k2")}</span><b>132</b></div>
+      <div class="kpi red"><span>${t("k3")}</span><b>¥214,400</b></div>
+      <div class="kpi"><span>${t("k4")}</span><b>58%</b></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:24px">
+      <div class="kpi"><div style="font-weight:700;margin-bottom:6px">${t("chartT")}</div>
+        <div class="bars">${months.map((m,i)=>`<div class="bar ${i===months.length-1?"cur":""}" style="height:${m[1]/max*100}%"><span>${m[0]}</span></div>`).join("")}</div><div style="height:22px"></div></div>
+      <div class="kpi"><div style="font-weight:700;margin-bottom:6px">${t("upT")}</div>
+        <table><tr><th>${t("thDate")}</th><th>${t("thExp")}</th><th>${t("thPpl")}</th><th>${t("thLang")}</th><th>${t("thPay")}</th></tr>
+        ${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td><span class="pill ${r[3]}">${r[3]==="in"?"English":"日本語"}</span></td><td><b>${r[4]}</b></td></tr>`).join("")}</table></div>
+    </div>
+  </div></section>`;
+}
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.style.display="block";clearTimeout(window._tt);window._tt=setTimeout(()=>el.style.display="none",3200);}
+function applyStatic(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
+  document.getElementById("langBtn").textContent = lang==="ja"?"EN":"日本語";
+}
+function route(){
+  const h = location.hash.replace(/^#\/?/,"");
+  const [page,arg] = h.split("/");
+  document.querySelectorAll("[data-nav]").forEach(a=>a.classList.toggle("on",a.dataset.nav===(page||"home")||(page==="exp"&&a.dataset.nav==="home")));
+  if(page==="exp") detail(arg); else if(page==="guide") guide(); else if(page==="dashboard") dashboard(); else home();
+  window.scrollTo(0,0);
+}
+document.getElementById("langBtn").onclick=()=>{lang = lang==="ja"?"en":"ja";try{localStorage.setItem("asobi-lang",lang);}catch(e){} applyStatic(); route();};
+window.addEventListener("hashchange",route);
+applyStatic(); route();
+</script>
+</body>
+</html>
